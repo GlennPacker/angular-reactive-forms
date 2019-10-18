@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 import { Customer } from './customer';
 
@@ -10,14 +10,30 @@ import { Customer } from './customer';
 })
 export class CustomerComponent implements OnInit {
   customer = new Customer();
+  customerForm: FormGroup;
 
-  constructor() { }
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
+    this.customerForm = this.fb.group({
+      firstName: '',
+      lastName: '',
+      email: '',
+      sendCatalogue: false,
+    });
   }
 
-  save(customerForm: NgForm) {
-    console.log(customerForm.form);
-    console.log('Saved: ' + JSON.stringify(customerForm.value));
+  populateTestData(): void {
+    this.customerForm.patchValue({
+      firstName: 'boby',
+      lastName: 'bits',
+      email: 'a@a.com',
+      sendCatalogue: false
+    });
+  }
+
+  save() {
+    console.log(this.customerForm);
+    console.log('Saved: ' + JSON.stringify(this.customerForm.value));
   }
 }
