@@ -19,15 +19,13 @@
                  id="firstNameId"
                  type="text"
                  placeholder="First Name (required)"
-                 required
-                 minlength="3"
                  [ngClass]="{'is-invalid': (customerForm.get('firstName').touched || customerForm.get('firstName').dirty) && !customerForm.get('firstName').valid }" />
           <span class="invalid-feedback">
             <span *ngIf="customerForm.get('firstName').errors?.required">
               Please enter your first name.
             </span>
             <span *ngIf="customerForm.get('firstName').errors?.minlength">
-              The first name must be longer than 3 characters.
+              The first name must be longer than 2 characters.
             </span>
           </span>
         </div>
@@ -42,8 +40,6 @@
                  id="lastNameId"
                  type="text"
                  placeholder="Last Name (required)"
-                 required
-                 maxlength="50"
                  [ngClass]="{'is-invalid': (customerForm.get('lastName').touched || customerForm.get('lastName').dirty) && !customerForm.get('lastName').valid }" />
           <span class="invalid-feedback">
             <span *ngIf="customerForm.get('lastName').errors?.required">
@@ -65,8 +61,6 @@
                  id="emailId"
                  type="email"
                  placeholder="Email (required)"
-                 required
-                 email
                  [ngClass]="{'is-invalid': (customerForm.get('email').touched || customerForm.get('email').dirty) && !customerForm.get('email').valid }" />
           <span class="invalid-feedback">
             <span *ngIf="customerForm.get('email').errors?.required">
