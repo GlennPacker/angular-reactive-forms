@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
-
 import { Customer } from './customer';
+import { debounceTime } from 'rxjs/operators';
 
 function ratingRange(c: AbstractControl): { [key: string]: boolean } | null {
   if (c.value !== null && (isNaN(c.value) || c.value < 1 || c.value > 5)) {
@@ -65,9 +65,25 @@ export class CustomerComponent implements OnInit {
     );
 
     const emailControl = this.customerForm.get('emailGroup.email');
-    emailControl.valueChanges.subscribe(
+    emailControl.valueChanges.pipe(
+      debounceTime(1000)
+    ).subscribe(
       value => this.setMessage(emailControl)
+      // value => { this.emailMessage = this.setControlsValidationMessage(emailControl, this.emailValidationMessages); }
+
     );
+  }
+
+  setControlsValidationMessage(c: AbstractControl, messages: Object): string {
+    let result = '';
+
+    if ((c.touched || c.dirty) && c.errors) {
+      result = Object.keys(c.errors).map(
+        key => messages[key]
+      ).join(' ');
+    }
+
+    return result;
   }
 
   setMessage(c: AbstractControl): void {
