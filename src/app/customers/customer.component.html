@@ -70,6 +70,22 @@
         </div>
       </div>
 
+      <div class="form-group row mb-2">
+        <label class="col-md-2 col-form-label"
+               for="ratingId2">Rating 2 custom validator with params</label>
+        <div class="col-md-8">
+          <input class="form-control"
+                 formControlName="rating2"
+                 id="ratingId2"
+                 type="number"
+                 [ngClass]="{'is-invalid': (customerForm.get('rating2').touched || customerForm.get('rating2').dirty) && !customerForm.get('rating2').valid }" />
+          <span class="invalid-feedback">
+            <span *ngIf="customerForm.get('rating').errors?.range">
+              Please rate your experience from 1 to 5
+            </span>
+          </span>
+        </div>
+      </div>
 
       <div class="form-group row mb-2">
         <label class="col-md-2 col-form-label"
