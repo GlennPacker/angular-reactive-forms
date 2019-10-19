@@ -16,7 +16,14 @@ function ratingRange2(min: number, max: number): ValidatorFn {
       return { 'range': true };
     }
     return null;
-  }
+  };
+}
+
+function emailMatcher(c: AbstractControl): { [key: string]: Boolean } | null {
+  const emailControl = c.get('email');
+  const confirmControl = c.get('confirmEmail');
+
+  return (emailControl.pristine || confirmControl.pristine || emailControl.value === confirmControl.value) ? null : { 'match': true };
 }
 
 @Component({
@@ -36,12 +43,15 @@ export class CustomerComponent implements OnInit {
         [Validators.required, Validators.minLength(2), Validators.maxLength(10)]
       ],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
-      email: ['', [Validators.required, Validators.email]],
       phone: '',
       notification: ['email'],
       sendCatalogue: false,
       rating: [null, ratingRange],
-      rating2: [null, ratingRange2(2, 8)]
+      rating2: [null, ratingRange2(2, 8)],
+      emailGroup: this.fb.group({
+        email: ['', [Validators.required, Validators.email]],
+        confirmEmail: ['', [Validators.required]],
+      }, { validator: emailMatcher })
     });
   }
 
