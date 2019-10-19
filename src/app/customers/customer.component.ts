@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 import { Customer } from './customer';
 import { debounceTime } from 'rxjs/operators';
 
@@ -41,6 +41,10 @@ export class CustomerComponent implements OnInit {
     email: 'Please enter a valid email address.'
   };
 
+  get addresses(): FormArray {
+    return <FormArray>this.customerForm.get('addresses');
+  }
+
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
@@ -51,13 +55,14 @@ export class CustomerComponent implements OnInit {
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       phone: '',
       notification: ['email'],
-      sendCatalogue: false,
+      sendCatalogue: true,
       rating: [null, ratingRange],
       rating2: [null, ratingRange2(2, 8)],
       emailGroup: this.fb.group({
         email: ['', [Validators.required, Validators.email]],
         confirmEmail: ['', [Validators.required]],
-      }, { validator: emailMatcher })
+      }, { validator: emailMatcher }),
+      addresses: this.fb.array([this.buildAddress()]),
     });
 
     this.customerForm.get('notification').valueChanges.subscribe(
@@ -70,6 +75,21 @@ export class CustomerComponent implements OnInit {
     ).subscribe(
       value => this.setMessage(emailControl)
     );
+  }
+
+  addAddress(): void {
+    this.addresses.push(this.buildAddress());
+  }
+
+  buildAddress(): FormGroup {
+    return this.fb.group({
+      addressType: 'home',
+      street1: '',
+      street2: '',
+      city: '',
+      state: '',
+      zip: null
+    });
   }
 
   setMessage(c: AbstractControl): void {
