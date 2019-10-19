@@ -32,8 +32,14 @@ function emailMatcher(c: AbstractControl): { [key: string]: Boolean } | null {
   styleUrls: ['./customer.component.css']
 })
 export class CustomerComponent implements OnInit {
+  emailMessage: string;
   customer = new Customer();
   customerForm: FormGroup;
+
+  private emailValidationMessages = {
+    required: 'Please enter your email address.',
+    email: 'Please enter a valid email address.'
+  };
 
   constructor(private fb: FormBuilder) { }
 
@@ -57,6 +63,21 @@ export class CustomerComponent implements OnInit {
     this.customerForm.get('notification').valueChanges.subscribe(
       value => this.setNotification(value)
     );
+
+    const emailControl = this.customerForm.get('emailGroup.email');
+    emailControl.valueChanges.subscribe(
+      value => this.setMessage(emailControl)
+    );
+  }
+
+  setMessage(c: AbstractControl): void {
+    this.emailMessage = '';
+
+    if ((c.touched || c.dirty) && c.errors) {
+      this.emailMessage = Object.keys(c.errors).map(
+        key => this.emailValidationMessages[key]
+      ).join(' ');
+    }
   }
 
   setNotification(notifyVia: string): void {

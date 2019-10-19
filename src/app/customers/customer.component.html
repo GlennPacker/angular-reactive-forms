@@ -123,20 +123,9 @@
                    id="emailId"
                    type="email"
                    placeholder="Email (required)"
-                   [ngClass]="{'is-invalid': (
-                      (customerForm.get('emailGroup.email').touched 
-                      || customerForm.get('emailGroup.email').dirty) 
-                      && !customerForm.get('emailGroup.email').valid
-                     ) 
-                     || customerForm.get('emailGroup').errors
-                      }" />
+                   [ngClass]="{'is-invalid': emailMessage}" />
             <span class="invalid-feedback">
-              <span *ngIf="customerForm.get('emailGroup.email').errors?.required">
-                Please enter your email address.
-              </span>
-              <span *ngIf="customerForm.get('emailGroup.email').errors?.email">
-                Please enter a valid email address.
-              </span>
+              {{emailMessage}}
             </span>
           </div>
         </div>
