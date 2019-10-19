@@ -53,6 +53,10 @@ export class CustomerComponent implements OnInit {
         confirmEmail: ['', [Validators.required]],
       }, { validator: emailMatcher })
     });
+
+    this.customerForm.get('notification').valueChanges.subscribe(
+      value => this.setNotification(value)
+    );
   }
 
   setNotification(notifyVia: string): void {
